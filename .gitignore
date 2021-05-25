@@ -41,3 +41,5 @@ vignettes/*.pdf
 .DS_Store
 
 data/raw/*
+data/drone/L0/photos/*
+data/drone/L0/metadata/*
