@@ -43,3 +43,4 @@ vignettes/*.pdf
 data/raw/*
 data/drone/L0/photos/*
 data/drone/L0/metadata/*
+presentation-materials/*
