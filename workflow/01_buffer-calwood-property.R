@@ -19,7 +19,7 @@ sf::st_read("data/raw/property/property.shp") %>%
   dplyr::mutate(Name = "Cal-Wood", 
                 Description = "Cal-Wood property boundary") %>% 
   dplyr::select(-Id) %>% 
-  sf::st_write(dsn = "data/out/calwood_property_boundary.gpkg", delete_dsn = TRUE)
+  sf::st_write(dsn = "data/out/calwood-property-boundary.gpkg", delete_dsn = TRUE)
 
 cw_buff_50 <- 
   sf::st_read("data/raw/property/property.shp") %>% 
