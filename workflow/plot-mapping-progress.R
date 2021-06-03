@@ -37,5 +37,5 @@ sampling_progress_gg <-
 
 sampling_progress_gg
 
-ggsave(filename = "figs/sampling-progress_2021-05-28.png", plot = sampling_progress_gg)
+ggsave(filename = "figs/sampling-progress_2021-06-02.png", plot = sampling_progress_gg)
 
