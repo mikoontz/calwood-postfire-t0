@@ -41,6 +41,9 @@ vignettes/*.pdf
 .DS_Store
 
 data/raw/*
-data/drone/L0/photos/*
-data/drone/L0/metadata/*
+data/drone/L0/*
 presentation-materials/*
+figs/Cal-Wood Burn Severity Aerial topo Map.pdf
+figs/Cal-Wood Fire Boundaries Aerial Map.pdf
+figs/Cal-Wood Fire Boundaries Topo Map.pdf
+figs/projects completed versus soil burn severity.pdf
