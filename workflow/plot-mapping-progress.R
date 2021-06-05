@@ -9,7 +9,7 @@ library(lubridate)
 
 dir.create("figs", showWarnings = FALSE)
 
-cw <- sf::st_read("data/out/calwood_property_boundary.gpkg")
+cw <- sf::st_read("data/out/calwood-property-boundary.gpkg")
 cw_fire <- sf::st_read("data/out/calwood-fire-perimeter.gpkg") %>% slice(2)
 
 metadata <- 
@@ -31,11 +31,11 @@ sampling_progress_gg <-
   ggplot() +
   geom_sf(data = cw, alpha = 0.5, fill = "blue") +
   geom_sf(data = cw_fire, color = "red", lwd = 2, fill = NA) +
-  geom_sf(data = photo_points, aes(color = sampling_day), alpha = 0.25) +
+  geom_sf(data = photo_points, aes(color = sampling_day), alpha = 1, cex = 0.75) +
   theme_bw() +
   coord_sf(xlim = c(st_bbox(cw)[c(1, 3)]), ylim = c(st_bbox(cw)[c(2, 4)]))
 
 sampling_progress_gg
 
-ggsave(filename = "figs/sampling-progress_2021-06-02.png", plot = sampling_progress_gg)
+ggsave(filename = "figs/sampling-progress_2021-06-04.png", plot = sampling_progress_gg)
 
