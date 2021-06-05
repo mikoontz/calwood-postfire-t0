@@ -35,6 +35,30 @@ plot(cw_buff_50)
 
 sf::st_write(cw_buff_50, dsn = "data/out/calwood_property_boundary_50m_buffer.kml", delete_dsn = TRUE)
 
-cw_fire <- st_read(dsn = "data/raw/Calwood_Lefthand/Calwood_Lefthand.shp")
+cw_fire <- 
+  sf::st_read(dsn = "data/raw/Calwood_Lefthand/Calwood_Lefthand.shp") %>% 
+  dplyr::filter(st_area(.) == max(st_area(.)))
 
-st_write(obj = cw_fire, dsn = "data/out/calwood-fire-perimeter.gpkg")
+sf::st_write(obj = cw_fire, dsn = "data/out/calwood-fire-perimeter.gpkg", delete_dsn = TRUE)
+
+cw_fire_buff_50 <- 
+  cw_fire %>% 
+  dplyr::filter(st_area(.) == max(st_area(.))) %>% 
+  sf::st_buffer(dist = 50, 
+                endCapStyle = "SQUARE", 
+                joinStyle = "MITRE", mitreLimit = 3) %>% 
+  sf::st_transform(4326) %>% 
+  dplyr::mutate(Name = "Calwood-Fire_50m-buffer", 
+                Description = "Calwood fire perimeter buffered by 50 m") %>% 
+  dplyr::select(-Id)
+  
+sf::st_write(obj = cw_fire_buff_50, dsn = "data/out/calwood_fire_perimeter_50m_buffer.kml", delete_dsn = TRUE)
+
+cw_buff_50_clean <- sf::st_read("data/out/calwood_property_boundary_50m_buffer_clean.kml")
+
+cw_intersect <- sf::st_intersection(x = cw_fire_buff_50, 
+                                    y = cw_buff_50_clean)
+
+plot(cw_intersect %>% st_geometry())
+
+sf::st_write(obj = cw_intersect, dsn = "data/out/calwood_fire_perim_calwood_property_intersect.kml")
