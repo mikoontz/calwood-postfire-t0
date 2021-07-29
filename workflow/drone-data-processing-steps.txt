@@ -1,0 +1,130 @@
+calwood-postfire-t0 processing
+Metashape 1.7
+Over et al., 2021
+
+1) SETUP
+a) Create camera calibration groups from each flight (i.e., battery change)
+b) Ensure all ground photos (that Map Pilot takes just before takeoff) are disabled
+c) Ensure all image quality values are >0.5
+
+2) ALIGN PHOTOS (matching points ~2 hrs 15 mins; estimating camera locations ~18 hrs)
+a) Workflow >> Align photos
+b) Accuracy: High
+c) Generic preselection [checked]
+d) Reference preselection: Source [checked]
+e) Key point limit: 40,000
+f) Tie point limit: 0 (unlimited)
+g) Exclude stationary tie points [checked]
+h) Adaptive camera model fitting [checked]
+
+3) ADD MARKERS
+None to add.
+
+4) OPTIMIZE CAMERA ALIGNMENT
+a) Duplicate active chunk
+b) Tools >> Optimize cameras
+c) General, check f, k1, k2, k3, cx, cy, p1, p2
+d) Advanced, check Adaptive camera model fitting, Estimate tie point covariance
+e) RMS reprojection error: 0.165142 (0.756967 pixels)
+f) Lowest 3 projections: 615, 1374, 2690
+g) Highest 3 errors (px): 2.132, 1.770, 1.712
+
+
+5) FILTER BY RECONSTRUCTION UNCERTAINTY (perform 2x to get toward Level 10)
+a) Duplicate active chunk
+b) Model >> Gradual Selection
+c) Criterion: Reconstruction uncertainty
+d) Aiming for Level 10 without deleting >50% of points; Level 20 results in 16441161 out of 33712585 points selected, which is <50% (48.7%)
+e) Okay >> Edit >> Delete selection
+f) Tools >> Optimize cameras
+g) General, check f, k1, k2, k3, cx, xy, p1, p2
+h) Advanced, check Adaptive camera model fitting, Estimate tie point covariance
+i) RMS reprojection error: 0.175244 (0.842409 pixels)
+j) Lowest 3 projections: 437, 1038, 1513
+k) Highest 3 errors (px): 2.367, 2.138, 1.991
+l) Model >> Gradual Selection
+m) Criterion: Reconstruction uncertainty
+n) Aiming for Level 10 without deleting >50% of points; Level 12.3 results in 8548086 out of 17271424 points selected, which is <50% (49.5%)
+o) Okay >> Edit >> Delete Selection
+p) Tools >> Optimize cameras
+q) General, check f, k1, k2, k3, cx, xy, p1, p2
+r) Advanced, check Adaptive camera model fitting, Estimate tie point covariance
+s) RMS reprojection error: 0.181032 (0.909188 pixels)
+t) Lowest 3 projections: 340, 514, 524
+u) Highest 3 errors (px): 2.630, 2.608, 2.429
+
+6) FILTER BY PROJECTION ACCURACY (aim towards Level 2)
+a) Duplicate active chunk
+b) Model >> Gradual Selection
+c) Criterion: Projection accuracy
+d) Aiming for Level 2 without deleting >50% of points; Level 2.2 results in 4229326 out of 8723338 points selected, which is <50% ()
+e) Okay >> Edit >> Delete Selection
+f) Tools >> Optimize cameras
+g) General, check f, k1, k2, k3, cx, xy, p1, p2
+h) Advanced, check Adaptive camera model fitting, Estimate tie point covariance
+i) RMS reprojection error: 0.189558 (0.383333 pixels)
+j) Lowest 3 projections: 92, 175, 181
+k) Highest 3 errors (px): 0.563, 0.459, 0.457
+l) Duplicate active chunk
+m) Aiming for Level 2 without deleting >50% of points; Level 2 results in 2037334 out of 4494012 points selected, which is <50% ()
+n) Okay >> Edit >> Delete Selection
+o) Tools >> Optimize cameras
+p) General, check f, k1, k2, k3, cx, xy, p1, p2
+q) Advanced, check Adaptive camera model fitting, Estimate tie point covariance
+r) RMS reprojection error: 0.187123 (0.361545 pix)
+s) Lowest 3 projections: 47, 67, 68
+t) Highest 3 errors (px): 0.546, 0.457, 0.455
+
+7) FILTER BY REPROJECTION ERROR
+a) Duplicate active chunk
+b) Reference panel >> Reference settings >> Image Coordinates Accuracy >> Tie point accuracy: set to 1 (default)
+c) Model >> Gradual Selection
+d) Criterion: Reprojection error
+e) Aiming for Level 0.3 without deleting >10% of points; Level 0.411 results in 242381 out of 2456678 points selected, which is <10% ()
+f) Okay >> Edit >> Delete selection
+g) Tools >> Optimize cameras
+h) General, check f, k1, k2, k3, k4, cx, xy, p1, p2, b1, b2
+i) Advanced, check Adaptive camera model fitting, Estimate tie point covariance
+j) RMS reprojection error: 0.170403 (0.328706 pix)
+k) Lowest 3 projections: 43, 61, 61
+l) Highest 3 errors (px): 0.431, 0.394, 0.391
+m) Aiming for Level 0.3 without deleting >10% of points; Level 0.357 results in 216793 out of 2214297 points selected, which is <10% ()
+n) Okay >> Edit >> Delete selection
+o) Tools >> Optimize cameras
+p) General, check f, k1, k2, k3, k4, cx, xy, p1, p2, b1, b2
+q) Advanced, check Adaptive camera model fitting, Estimate tie point covariance
+r) RMS reprojection error: 0.157764 (0.303943 pix)
+s) Lowest 3 projections: 37, 50, 55
+t) Highest 3 errors (px): 0.515, 0.455, 0.413
+u) Skip steps to improve any SEUW deviation from 1
+
+8) BUILD DENSE POINT CLOUD (5 days)
+a) Duplicate active chunk
+b) Workflow >> Build Dense Point Cloud
+c) Quality: High
+d) Depth filtering: Mild
+e) Calculate point colors: checked
+f) Calculate point confidence: checked
+
+9) CLEAN DENSE POINT CLOUD
+a) Duplicate active chunk (called "Analysis ready dense point cloud")
+b) Tools >> Dense Cloud >> Filter by Confidence >> Select Confidence Range (min: 2, max: 255). Default is 0 to 255 and I tried a few numbers attempting to keep the minimum as low as possible while still removing obviously wrong points (e.g., ones that are way outside the survey area, thousands of meters above or below the survey area). Setting the minimum to 2 seemed to work well for this particular project.
+
+10) BUILD DEM
+a) Workflow >> Build DEM (use the "Analysis ready dense point cloud" as the active chunk)
+b) Type: Geographic
+c) Source data: dense cloud
+d) Interpolation: Enabled (default) (Note that the USGS instructions suggest to create 2 DEMs-- one with holes filled (interpolation enabled) and one that interpolates across gaps in the dense point cloud which might be a truer representation of the elevations derived from the SfM process. In our case, because our flight parameters were designed to leave no gaps, these two DEMs might not be very different particularly where we care about it (e.g., there's a bit of a hole in the dense point cloud coverage over the pond but who cares?)
+e) Point classes: all
+f) Setup boundaries: checked, but all default values retained such that the full x,y,z 3D extent is used at the maximum possible resolution (X: -105.396175 to -105.351117; Y: 40.145515 to 40.167474; Resolution (m): 0.0700263; Total size (pix): 54820 x 34819 (~1.9 billion cells)
+
+11) BUILD ORTHOMOSAIC
+a) Workflow >> Build Orthomosaic (use the "Analysis ready dense point cloud" as the active chunk
+b) Type: Geographic
+c) Surface: DEM
+d) Blending mode: Mosaic (default)
+e) Refine seamlines: unchecked
+f) Enable hole filling: checked
+g) Enable ghosting filter: unchecked (no guidance on this from USGS)
+g) Pixel size (degrees) left as default): x (4.10828e-07), y (3.15211e-07)
+h) Setup boundaries (left unchecked)
