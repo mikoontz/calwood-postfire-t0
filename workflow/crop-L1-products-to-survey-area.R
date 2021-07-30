@@ -192,14 +192,17 @@ ortho <- terra::rast(x = file.path("data", "out", "calwood-postfire-t0_ortho.tif
 
 # Cropped SRTM 30m data
 dem_crop <- terra::crop(x = dem, y = terra::vect(fire_plus_cw))
+dem_crop <- terra::mask(x = dem_crop, mask = terra::vect(fire_plus_cw))
 terra::writeRaster(x = dem_crop, filename = file.path("data", "drone", "L0", "mission-footprint", "calwood-postfire-t0_srtm30m.tif"), overwrite = TRUE)
 
 # Cropped Digital Surface Model (DSM)
 dsm_crop <- terra::crop(x = dsm, y = terra::vect(fire_plus_cw))
+dsm_crop <- terra::mask(x = dsm_crop, mask = terra::vect(fire_plus_cw))
 terra::writeRaster(x = dsm_crop, filename = file.path("data", "drone", "L1", "dsm", "calwood-postfire-t0_dsm.tif"), overwrite = TRUE)
 
 # Cropped orthomosaic
 ortho_crop <- terra::crop(x = ortho, y = terra::vect(fire_plus_cw))
+ortho_crop <- terra::mask(x = ortho_crop, mask = terra::vect(fire_plus_cw))
 terra::writeRaster(x = ortho_crop, filename = file.path("data", "drone", "L1", "ortho", "calwood-postfire-t0_ortho.tif"), overwrite = TRUE)
 
 # Cropped dense point cloud
