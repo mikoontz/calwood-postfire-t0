@@ -42,8 +42,14 @@ vignettes/*.pdf
 
 data/raw/*
 data/drone/L0/*
+data/drone/L1/*
 presentation-materials/*
 figs/Cal-Wood Burn Severity Aerial topo Map.pdf
 figs/Cal-Wood Fire Boundaries Aerial Map.pdf
 figs/Cal-Wood Fire Boundaries Topo Map.pdf
 figs/projects completed versus soil burn severity.pdf
+
+# Don't track Metashape project files
+calwood-postfire-t0.files/*
+calwood-postfire-t0.psx
+calwood-postfire-t0_processing-log.txt
