@@ -4,6 +4,7 @@ library(dplyr)
 library(tmap)
 library(terra)
 library(grid)
+library(sf)
 
 ortho <- terra::rast(file.path("data", "drone", "L1", "ortho", "calwood-postfire-t0_ortho.tif"))
 fire <- sf::st_read(file.path("data", "out", "calwood-fire-perimeter.gpkg"))
@@ -73,3 +74,26 @@ tmap_save(calwood_map_zoom, filename = file.path("figs", "calwood-ortho-map_zoom
 dpc <- lidR::readLAScatalog(folder = file.path("data", "out", "calwood-postfire-t0_dense-point-cloud.las"))
 dpc_crop <- lidR::clip_roi(las = dpc, geometry = aoi_sf, progress = TRUE)
 # lidR::writeLAS(las = dpc_crop, file = file.path("data", "drone", "L1", "dense-point-cloud", "calwood-postfire-t0_dense-point-cloud_small.las"))
+
+# Satellite-derived fire severity
+sev <- terra::rast("data/out/calwood_CBI_bc.tif")
+fire <- sf::st_read(file.path("data", "out", "calwood-fire-perimeter.gpkg"))
+
+cw_prop <- sf::read_sf("data/out/calwood_fire_perim_calwood_property_intersect.kml")
+plot(cw_prop$geometry)
+
+sev_crop <- terra::crop(x = sev, y = cw_prop)
+plot(sev_crop)
+calwood_severity_map <-
+  tmap::tm_shape(sev_crop) +
+  tm_raster(title = "Fire severity", style = "cont", palette = "inferno") +
+  tm_shape(fire) +
+  tm_borders(col = "red", lwd = 2) +
+  tm_scale_bar(width = 1/3) + 
+  tm_compass(position = c("right", "top"), type = "rose") +
+  tm_add_legend(type = "line", col = "red", lwd = 2, labels = "Cal-Wood Fire boundary")
+
+calwood_severity_map
+
+tmap::tmap_save(tm = calwood_severity_map, 
+                filename = file.path("figs", "calwood-severity-map_simple.png"), width = 10, height = 7.5)

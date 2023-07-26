@@ -53,3 +53,6 @@ figs/projects completed versus soil burn severity.pdf
 calwood-postfire-t0.files/*
 calwood-postfire-t0.psx
 calwood-postfire-t0_processing-log.txt
+
+figs/*
+data/*
